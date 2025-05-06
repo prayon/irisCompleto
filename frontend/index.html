@@ -1,0 +1,35 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Clasificador de Iris</title>
+</head>
+<body>
+  <h2>Predicción del tipo de flor Iris</h2>
+  <form id="formulario">
+    <label>Sepal Length: <input type="number" step="any" name="sepal_length" required></label><br>
+    <label>Sepal Width: <input type="number" step="any" name="sepal_width" required></label><br>
+    <label>Petal Length: <input type="number" step="any" name="petal_length" required></label><br>
+    <label>Petal Width: <input type="number" step="any" name="petal_width" required></label><br>
+    <button type="submit">Enviar</button>
+  </form>
+  <p id="resultado"></p>
+
+  <script>
+    const form = document.getElementById('formulario');
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const datos = Object.fromEntries(new FormData(form));
+      for (let key in datos) datos[key] = parseFloat(datos[key]);
+      const response = await fetch('https://renderproyecto.onrender.com/predict', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(datos)
+      });
+      const json = await response.json();
+      document.getElementById('resultado').innerText = "Predicción: " + json.prediction;
+    });
+  </script>
+</body>
+</html>
