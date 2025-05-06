@@ -16,20 +16,32 @@
   </form>
   <p id="resultado"></p>
 
-  <script>
-    const form = document.getElementById('formulario');
-    form.addEventListener('submit', async function (e) {
-      e.preventDefault();
-      const datos = Object.fromEntries(new FormData(form));
-      for (let key in datos) datos[key] = parseFloat(datos[key]);
-      const response = await fetch('https://renderproyecto.onrender.com/predict', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(datos)
+ <script>
+  document.getElementById("iris-form").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+    const data = {
+      sepal_length: parseFloat(formData.get("sepal_length")),
+      sepal_width: parseFloat(formData.get("sepal_width")),
+      petal_length: parseFloat(formData.get("petal_length")),
+      petal_width: parseFloat(formData.get("petal_width"))
+    };
+
+    try {
+      const response = await fetch("https://backend.onrender.com/predict", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
       });
-      const json = await response.json();
-      document.getElementById('resultado').innerText = "Predicción: " + json.prediction;
-    });
-  </script>
+
+      const result = await response.json();
+      document.getElementById("resultado").innerText = "Predicción: " + result.prediction;
+    } catch (error) {
+      document.getElementById("resultado").innerText = "Error al conectar con el servidor.";
+    }
+  });
+</script>
+
 </body>
 </html>
