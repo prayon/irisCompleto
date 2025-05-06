@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: iris-api-db
+    env: python
+    buildCommand: ""
+    startCommand: bash start.sh
+    repo: https://github.com/prayon/iris-api-db
+    branch: main
+    plan: free
+    envVars:
+      - key: DATABASE_URL
+        sync: false
